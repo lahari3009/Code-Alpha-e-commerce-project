@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Cart</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        .item { display: flex; align-items: center; gap: 20px; padding: 15px 0; border-bottom: 1px solid #eee; }
+        .item img { width: 80px; height: 80px; object-fit: cover; border-radius: 5px; }
+        .item-info { flex: 1; }
+        .item-info h3 { margin: 0 0 5px; }
+        .item-info p { margin: 0; color: #666; font-size: 14px; }
+        .subtotal { font-weight: bold; color: #e44d26; }
+        .remove { color: red; text-decoration: none; font-size: 13px; }
+        .total { text-align: right; font-size: 22px; font-weight: bold; margin-top: 20px; }
+        .btn { display: inline-block; background: #333; color: white; padding: 12px 30px; border-radius: 5px; text-decoration: none; margin-top: 15px; }
+        .back { display: inline-block; margin-bottom: 20px; color: #333; text-decoration: none; font-size: 14px; }
+        .empty { text-align: center; color: #666; padding: 40px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back">← Continue Shopping</a>
+        <h1>🛒 My Cart</h1>
+        {% if products %}
+            {% for item in products %}
+            <div class="item">
+                {% if item.product.image %}
+                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                {% endif %}
+                <div class="item-info">
+    <h3>{{ item.product.name }}</h3>
+    <div style="display:flex; align-items:center; gap:10px; margin:8px 0;">
+        <a href="/remove-one/{{ item.product.pk }}/" style="background:#ddd; padding:4px 10px; border-radius:4px; text-decoration:none; font-size:18px; color:#333;">−</a>
+        <span style="font-size:16px; font-weight:bold;">{{ item.quantity }}</span>
+        <a href="/add-to-cart/{{ item.product.pk }}/" style="background:#333; color:white; padding:4px 10px; border-radius:4px; text-decoration:none; font-size:18px;">+</a>
+    </div>
+    <p>₹{{ item.product.price }} each</p>
+</div>
+                <span class="subtotal">₹{{ item.subtotal }}</span>
+                <a href="/remove-from-cart/{{ item.product.pk }}/" class="remove">Remove</a>
+            </div>
+            {% endfor %}
+            <div class="total">Total: ₹{{ total }}</div>
+           <a href="/checkout/" class="btn">Proceed to Checkout</a>
+        {% else %}
+            <div class="empty">
+                <p>Your cart is empty!</p>
+                <a href="/" class="btn">Start Shopping</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
